@@ -50,7 +50,7 @@ export const dummyUserData = {
   name: "Raj Aryan",
   email: "admin@example.com",
   password: "$2b$10$VESVdPDjL5LF.KCU6jKyqeXNSLASAAfpR2kkIJExtMO.PJvZJAudy",
-  credits: 2000,
+  credits: 20,
 };
 
 // copy for server controllers
