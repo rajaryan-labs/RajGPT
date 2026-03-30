@@ -48,7 +48,7 @@ const Credits = () => {
                 ))}
               </ul>
             </div>
-            `
+
             <button className="mt-6 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-medium py-2 rounded transition-colors cursor-pointer">
               Buy Now
             </button>
