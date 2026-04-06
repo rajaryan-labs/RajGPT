@@ -47,12 +47,19 @@ QuickGPT is a ChatGPT clone built using the MERN stack (MongoDB, Express, React,
     npm run dev
     ```
 
-## Features (Planned)
+## Features
 
-- AI Chat Interface
-- User Authentication
-- Chat History
-- Real-time responses
+- **AI Text Generation:** Powered by Google's native Generative AI SDK (Gemini).
+- **AI Image Generation:** Prompts are converted into rich visuals using ImageKit.
+- **User Authentication:** Secure JWT-based authentication system.
+- **Session Management:** Stores and retrieves past chat sessions.
+- **Rich Text Rendering:** Markdown parsing on the frontend.
+
+## Documentation
+
+For specific setup and architecture details, please consult the respective directory documentation:
+- [Server Documentation](./server/README.md)
+- [Client Documentation](./client/README.md)
 
 ## License
 
