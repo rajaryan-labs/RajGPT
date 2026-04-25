@@ -1,8 +1,17 @@
+// import { OpenAI } from "openai";
+
+// const openai = new OpenAI({
+//   apiKey: process.env.GEMINI_API_KEY,
+//   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+// });
+
+// export default openai;
+
 import { GoogleGenAI } from "@google/genai";
 
-// The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const openai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
+  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
 });
 
 export default openai;
