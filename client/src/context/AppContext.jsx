@@ -94,7 +94,7 @@ export const AppContextProvider = ({ children }) => {
       setUser(null);
       setLoadingUser(false);
     }
-  }, []);
+  }, [token]);
   const value = {
     navigate,
     user,
