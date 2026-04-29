@@ -100,7 +100,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                 setIsMenuOpen(false);
               }}
               key={chat._id}
-              className="p-2 px-4 dark:bg-[#57317C]/10 border border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer flex justify-between group"
+              className="p-2 px-4 dark:bg-[#57317C]/10 border border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer flex justify-between items-center group active:scale-[0.98] transition-transform"
             >
               <div>
                 <p className="truncate w-full">
@@ -119,7 +119,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                   })
                 }
                 src={assets.bin_icon}
-                className="hidden group-hover:block w-4 cursor-pointer not-dark:invert"
+                className="max-md:block hidden group-hover:block w-5 p-0.5 cursor-pointer not-dark:invert active:opacity-60 transition-opacity"
                 alt=""
               />
             </div>
@@ -131,7 +131,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
           navigate("/community");
           setIsMenuOpen(false);
         }}
-        className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all"
+        className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 active:scale-95 transition-all"
       >
         <img src={assets.gallery_icon} className="w-4.5 not-dark:invert" />
         <div className="flex flex-col text-sm ">
@@ -144,7 +144,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         onClick={() => {
           navigate("/credits");
         }}
-        className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all"
+        className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 active:scale-95 transition-all"
       >
         <img src={assets.diamond_icon} className="w-4.5 dark:invert" />
         <div className="flex flex-col text-sm ">
@@ -175,18 +175,18 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
       {/* User Account */}
       <div className="flex items-center gap-3 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer group">
         <img src={assets.user_icon} className="w-7 rounded-full" />
-        <div className="flex flex-col text-sm ">
+        <div className="flex flex-col flex-1 text-sm">
           <p className="flex-1 text-sm dark:text-primary truncate">
             {user ? user.name : "Login Your Account"}
           </p>
-          {user && (
-            <img
-              onClick={logout}
-              src={assets.logout_icon}
-              className="h-5 cursor-pointer hidden not-dark:invert group-hover:block "
-            />
-          )}
         </div>
+        {user && (
+          <img
+            onClick={logout}
+            src={assets.logout_icon}
+            className="h-5 cursor-pointer max-md:block hidden not-dark:invert group-hover:block active:opacity-60 transition-opacity"
+          />
+        )}
       </div>
       <img
         src={assets.close_icon}

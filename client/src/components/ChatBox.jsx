@@ -100,9 +100,9 @@ const ChatBox = () => {
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col justify-between m-5 md:m-10 xl:mx-30 max-md:mt-14 2xl:pr-40">
+    <div className="flex-1 flex flex-col justify-between m-2 sm:m-5 md:m-10 xl:mx-30 max-md:mt-14 2xl:pr-40 pb-[env(safe-area-inset-bottom)]">
       {/* Chat Messages */}
-      <div ref={containerRef} className="flex-1 mb-5 overflow-y-scroll">
+      <div ref={containerRef} className="flex-1 mb-3 sm:mb-5 overflow-y-scroll">
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center gap-2 text-primary">
             <img
@@ -142,12 +142,12 @@ const ChatBox = () => {
       {/* Prompt Input Box */}
       <form
         onSubmit={onSubmit}
-        className="bg-primary/20 dark:bg-[#583C79]/30 border border-primary dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-3 pl-4 mx-auto flex gap-4 items-center"
+        className="bg-primary/20 dark:bg-[#583C79]/30 border border-primary dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-2 pl-3 sm:p-3 sm:pl-4 mx-auto flex gap-2 sm:gap-4 items-center shrink-0"
       >
         <select
           onChange={(e) => setMode(e.target.value)}
           value={mode}
-          className="text-sm pl-3 pr-2 outline-none"
+          className="text-xs sm:text-sm pl-1 sm:pl-3 pr-1 sm:pr-2 outline-none"
         >
           <option className="dark:bg-purple-900" value="text">
             Text
@@ -159,14 +159,14 @@ const ChatBox = () => {
         <input
           onChange={(e) => setPrompt(e.target.value)}
           value={prompt}
-          className="flex-1 w-full text-sm outline-none"
+          className="flex-1 w-0 min-w-0 text-xs sm:text-sm outline-none"
           type="text"
           placeholder="Enter Your Prompt Here.."
           required
         />
-        <button disabled={loading}>
+        <button disabled={loading} className="shrink-0">
           <img
-            className="w-8 cursor-pointer"
+            className="w-6 sm:w-8 cursor-pointer"
             src={loading ? assets.stop_icon : assets.send_icon}
             alt=""
           />

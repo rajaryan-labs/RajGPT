@@ -49,7 +49,7 @@ const Credits = () => {
               </ul>
             </div>
 
-            <button className="mt-6 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-medium py-2 rounded transition-colors cursor-pointer">
+            <button className="mt-6 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 active:scale-95 text-white font-medium py-2 rounded transition-all cursor-pointer">
               Buy Now
             </button>
           </div>
