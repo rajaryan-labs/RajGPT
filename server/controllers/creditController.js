@@ -58,7 +58,7 @@ export const purchasePlan = async (req, res) => {
   try {
     const { planId } = req.body;
     const userId = req.user._id;
-    const plan = plans.find((plan) => plan.Id === planId);
+    const plan = plans.find((plan) => plan._id === planId);
 
     if (!plan) {
       return res.json({ success: false, message: "Invalid plan" });

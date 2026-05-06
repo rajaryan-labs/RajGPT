@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { dummyPlans } from "../assets/assets";
+import toast from "react-hot-toast";
 import Loading from "./Loading";
 import { useAppContext } from "../context/AppContext";
 
@@ -29,19 +29,18 @@ const Credits = () => {
       const { data } = await axios.post(
         "/api/credit/purchase",
         { planId },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: token } },
       );
 
       if (!data?.success) {
-        toast.error(data?.message || "Something went wrong");
-        return;
+        throw new Error(data?.message || "Something went wrong");
       }
 
       window.location.href = data.url;
     } catch (error) {
       const message =
         error.response?.data?.message || error.message || "Request failed";
-      toast.error(message);
+      throw new Error(message);
     }
   };
 
