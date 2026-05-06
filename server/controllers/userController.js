@@ -8,10 +8,13 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
-  8;
 };
 
-// API to register user
+/**
+ * API Controller to register a new user.
+ * Checks for existing email, creates the user (password hashed via schema hook),
+ * and returns a JWT token.
+ */
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -31,8 +34,10 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// API to Login User
-
+/**
+ * API Controller to login an existing user.
+ * Validates the email and password, and returns a JWT token on success.
+ */
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -53,7 +58,9 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// API to get user data
+/**
+ * API Controller to get the current authenticated user's data.
+ */
 export const getUser = async (req, res) => {
   try {
     const user = req.user;
@@ -63,7 +70,10 @@ export const getUser = async (req, res) => {
   }
 };
 
-// API to get published images
+/**
+ * API Controller to get all published images for the community gallery.
+ * Uses MongoDB aggregation to find messages with isImage=true and isPublished=true.
+ */
 export const getPublishedImages = async (req, res) => {
   try {
     const publishedImageMessages = await Chat.aggregate([

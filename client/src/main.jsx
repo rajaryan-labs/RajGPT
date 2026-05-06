@@ -5,6 +5,10 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AppContextProvider } from "./context/AppContext.jsx";
 
+/**
+ * Entry point for the React application.
+ * Wraps the App component with BrowserRouter for routing and AppContextProvider for global state.
+ */
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AppContextProvider>

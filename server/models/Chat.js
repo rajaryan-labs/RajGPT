@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * Chat Model
+ * Defines the schema for chat sessions, including the associated user,
+ * chat name, and an array of messages with their roles, content, and metadata.
+ */
 const ChatSchema = new mongoose.Schema(
   {
     userId: { type: String, ref: "User", required: true },

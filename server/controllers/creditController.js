@@ -53,7 +53,11 @@ export const getPlans = async (req, res) => {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// API Controller for purchasing a plan
+/**
+ * API Controller for purchasing a credit plan.
+ * Validates the requested plan, creates a pending transaction,
+ * and generates a Stripe checkout session URL for payment.
+ */
 export const purchasePlan = async (req, res) => {
   try {
     const { planId } = req.body;

@@ -2,6 +2,12 @@ import Stripe from "stripe";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 
+/**
+ * Stripe Webhook Controller
+ * Handles events from Stripe (e.g., successful payment).
+ * Verifies the webhook signature, identifies the transaction,
+ * and updates the user's credit balance accordingly.
+ */
 export const stripeWebhooks = async (request, response) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const sig = request.headers["stripe-signature"];
@@ -34,6 +40,10 @@ export const stripeWebhooks = async (request, response) => {
             _id: transactionId,
             isPaid: false,
           });
+
+          if (!transaction) {
+            return response.json({ received: true, message: "Transaction not found or already paid" });
+          }
 
           // Update credits in user account
           await User.updateOne(

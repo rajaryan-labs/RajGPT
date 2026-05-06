@@ -4,6 +4,11 @@ import { assets } from "../assets/assets";
 import Message from "./Message";
 import toast from "react-hot-toast";
 
+/**
+ * ChatBox Component
+ * Responsible for displaying the chat messages, handling user input (text/image prompts),
+ * communicating with the backend to fetch AI responses, and auto-scrolling the chat view.
+ */
 const ChatBox = () => {
   const containerRef = useRef(null);
 
@@ -15,6 +20,12 @@ const ChatBox = () => {
   const [mode, setMode] = useState("text");
   const [isPublished, setIsPublished] = useState(false);
 
+  /**
+   * Handles the form submission to send a new message.
+   * Updates the UI immediately with the user's prompt, then makes an API request to get the AI response.
+   * Handles both text and image modes and updates credits accordingly.
+   * @param {Event} e - The form submission event
+   */
   const onSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -84,12 +95,14 @@ const ChatBox = () => {
     }
   };
 
+  // Effect to load messages from the currently selected chat
   useEffect(() => {
     if (selectedChat) {
       setMessages(selectedChat.messages);
     }
   }, [selectedChat]);
 
+  // Effect to auto-scroll to the bottom when new messages arrive
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo({

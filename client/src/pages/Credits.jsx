@@ -3,11 +3,19 @@ import toast from "react-hot-toast";
 import Loading from "./Loading";
 import { useAppContext } from "../context/AppContext";
 
+/**
+ * Credits Component
+ * Displays available credit packages that users can purchase.
+ * Integrates with Stripe for handling the payment process.
+ */
 const Credits = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const { token, axios } = useAppContext();
 
+  /**
+   * Fetches available credit plans from the server.
+   */
   const fetchPlans = async () => {
     try {
       const { data } = await axios.get("/api/credit/plan", {
@@ -24,6 +32,11 @@ const Credits = () => {
     setLoading(false);
   };
 
+  /**
+   * Handles purchasing a specific plan.
+   * Calls the backend to create a Stripe checkout session, then redirects the user to Stripe.
+   * @param {string} planId - The ID of the plan to purchase
+   */
   const purchasePlan = async (planId) => {
     try {
       const { data } = await axios.post(

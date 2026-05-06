@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { dummyPublishedImages } from "../assets/assets";
 import Loading from "./Loading";
 import axios from "axios";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
+/**
+ * Community Component
+ * Displays a gallery of images published by the community.
+ * Fetches the public images from the server and renders them in a grid.
+ */
 const Community = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const { axios } = useAppContext();
 
+  /**
+   * Fetches published images from the backend API.
+   * Updates the images state and sets loading to false when done.
+   */
   const fetchImages = async () => {
     try {
       const { data } = await axios.get("/api/user/published-images");
@@ -23,6 +32,7 @@ const Community = () => {
     setLoading(false);
   };
 
+  // Fetch images once the component mounts
   useEffect(() => {
     fetchImages();
   }, []);

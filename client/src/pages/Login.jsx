@@ -1,6 +1,14 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
+
+/**
+ * Login Component
+ * Handles user authentication, both for logging in existing users and registering new ones.
+ * Submits the form data to the backend and updates the global token state on success.
+ */
 const Login = () => {
+  // State management for form view, name, email, and password
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -8,6 +16,11 @@ const Login = () => {
 
   const { axios, setToken } = useAppContext();
 
+  /**
+   * Handles the form submission for login or registration.
+   * Sends the appropriate request to the API based on the current `state`.
+   * @param {Event} e - The form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = state === "login" ? "/api/user/login" : "/api/user/register";

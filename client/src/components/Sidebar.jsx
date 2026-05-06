@@ -5,6 +5,12 @@ import moment from "moment";
 import toast from "react-hot-toast";
 import Loading from "../pages/Loading";
 
+/**
+ * Sidebar Component
+ * Displays the application logo, new chat button, search input for conversations,
+ * recent chat history, links to community images, credit purchase, dark mode toggle,
+ * and user account/logout actions.
+ */
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   const {
     chats,
@@ -22,14 +28,22 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   } = useAppContext();
   const [search, setSearch] = useState("");
 
-  // Logout
+  /**
+   * Logs out the user by clearing the token from local storage and app state.
+   */
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
     toast.success("Logged out successfully");
   };
 
-  // Delete_Chat
+  /**
+   * Handles deleting a specific chat.
+   * Prompts for confirmation, then calls the backend API.
+   * On success, removes the chat from local state and refreshes chat history.
+   * @param {Event} e - The click event
+   * @param {string} chatId - The ID of the chat to delete
+   */
   const deleteChat = async (e, chatId) => {
     try {
       e.stopPropagation();

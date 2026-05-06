@@ -1,6 +1,9 @@
 import Chat from "../models/Chat.js";
 
-// API Controller for creating a new chat
+/**
+ * API Controller for creating a new chat session.
+ * Initializes an empty chat with default values and attaches it to the requesting user.
+ */
 export const createChat = async (req, res) => {
   try {
     const userId = req.user._id;

@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+/**
+ * User Model
+ * Defines the schema for application users, storing name, email, password, and credit balance.
+ * Includes a pre-save hook to hash the password securely before storing it in the database.
+ */
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },

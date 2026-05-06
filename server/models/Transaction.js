@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * Transaction Model
+ * Defines the schema for credit purchase transactions via Stripe.
+ * Tracks the user, selected plan, amount, and payment status.
+ */
 const transactionSchema = new mongoose.Schema(
   {
     userId: {

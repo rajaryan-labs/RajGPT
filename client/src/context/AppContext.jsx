@@ -8,6 +8,11 @@ axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
 
 const AppContext = createContext();
 
+/**
+ * AppContextProvider component
+ * Provides global state management for user authentication, chats, theme, and API token.
+ * It also initializes Axios with the server URL.
+ */
 export const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -17,6 +22,10 @@ export const AppContextProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loadingUser, setLoadingUser] = useState(true);
 
+  /**
+   * Fetches user data from the server using the stored token.
+   * Updates the `user` state on success or shows an error toast.
+   */
   const fetchUser = async () => {
     try {
       const { data } = await axios.get("/api/user/data", {
@@ -34,6 +43,10 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Creates a new chat session for the current user.
+   * Navigates to the home page and refreshes the user's chat list upon success.
+   */
   const createNewChat = async () => {
     try {
       if (!user) return toast("Login to create a new chat");
@@ -47,6 +60,10 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Fetches all chats associated with the current user.
+   * Auto-creates a new chat if the user currently has none.
+   */
   const fetchUsersChats = async () => {
     try {
       const { data } = await axios.get("/api/chat/get", {
@@ -69,6 +86,7 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  // Effect to apply the selected theme to the document and save to local storage
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -78,6 +96,7 @@ export const AppContextProvider = ({ children }) => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Effect to fetch chats when a user logs in, or clear chats on logout
   useEffect(() => {
     if (user) {
       fetchUsersChats();
@@ -87,6 +106,7 @@ export const AppContextProvider = ({ children }) => {
     }
   }, [user]);
 
+  // Effect to fetch user details when a token is set, or clear user on token removal
   useEffect(() => {
     if (token) {
       fetchUser();

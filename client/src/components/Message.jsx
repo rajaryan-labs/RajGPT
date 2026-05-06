@@ -4,7 +4,13 @@ import moment from "moment";
 import Markdown from "react-markdown";
 import Prism from "prismjs";
 
+/**
+ * Message Component
+ * Renders an individual chat message bubble. Handles both text and image messages.
+ * Applies Markdown parsing and Prism.js syntax highlighting to text content.
+ */
 const Message = ({ message }) => {
+  // Effect to apply syntax highlighting to code blocks whenever message content changes
   useEffect(() => {
     Prism.highlightAll();
   }, [message.content]);

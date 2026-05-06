@@ -4,7 +4,11 @@ import gemini from "../configs/gemini.js";
 import axios from "axios";
 import imagekit from "../configs/imagekit.js";
 
-// Text-based AI Chat Message Controller
+/**
+ * API Controller for text-based chat messages.
+ * Uses the Gemini API to generate a response, saves both user and AI messages,
+ * and deducts 1 credit from the user's account.
+ */
 export const textMessageController = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -18,6 +22,9 @@ export const textMessageController = async (req, res) => {
     const { chatId, prompt } = req.body;
 
     const chat = await Chat.findOne({ userId, _id: chatId });
+    if (!chat) {
+      return res.json({ success: false, message: "Chat not found" });
+    }
     chat.messages.push({
       role: "user",
       content: prompt,
@@ -48,7 +55,11 @@ export const textMessageController = async (req, res) => {
   }
 };
 
-// Image Generation Message Controller
+/**
+ * API Controller for AI image generation.
+ * Generates an image using ImageKit (which internally calls an AI generator),
+ * uploads it to the media library, saves the message, and deducts 2 credits.
+ */
 export const imageMessageController = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -62,6 +73,9 @@ export const imageMessageController = async (req, res) => {
     const { prompt, chatId, isPublished } = req.body;
     // Find chat
     const chat = await Chat.findOne({ userId, _id: chatId });
+    if (!chat) {
+      return res.json({ success: false, message: "Chat not found" });
+    }
     // Push user message
     chat.messages.push({
       role: "user",

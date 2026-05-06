@@ -8,6 +8,11 @@ import messageRouter from "./routes/messageRoutes.js";
 import creditRouter from "./routes/creditRoutes.js";
 import { stripeWebhooks } from "./controllers/webhooks.js";
 
+/**
+ * Main Server Entry Point
+ * Initializes the Express application, connects to the database,
+ * configures middleware (CORS, JSON parsing), and sets up all API routes.
+ */
 const app = express();
 await connectDB();
 

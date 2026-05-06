@@ -6,6 +6,11 @@ import {
 } from "../controllers/chatController.js";
 import { protect } from "../middlewares/auth.js";
 
+/**
+ * Chat Routes
+ * Defines endpoints for managing chat sessions.
+ * All routes here are protected and require a valid user token.
+ */
 const chatRouter = express.Router();
 
 chatRouter.get("/create", protect, createChat);
