@@ -1,5 +1,8 @@
 # QuickGPT
 
+> **✨ Project Status: Completed**
+> All major features including AI Chat, Image Generation, User Authentication, and Stripe Payments have been successfully implemented and deployed!
+
 QuickGPT is a ChatGPT clone built using the MERN stack (MongoDB, Express, React, Node.js).
 
 ## Project Structure
