@@ -87,10 +87,10 @@ export const imageMessageController = async (req, res) => {
     // Encode the prompt
     const encodedPrompt = encodeURIComponent(prompt);
 
-    // Construct ImageKit AI generation URL
-    const generatedImageUrl = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/quickgpt/${Date.now()}.png?tr=w-800,h-800`;
+    // Construct AI generation URL using a free reliable service (pollinations.ai) since ImageKit AI is returning 500
+    const generatedImageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=800&height=800&nologo=true`;
 
-    // Trigger generation by fetching from ImageKit
+    // Trigger generation by fetching from the AI service
     const aiImageResponse = await axios.get(generatedImageUrl, {
       responseType: "arraybuffer",
     });
