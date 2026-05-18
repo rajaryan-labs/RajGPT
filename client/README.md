@@ -1,6 +1,6 @@
-# QuickGPT Client
+# RajGPT Client
 
-This is the frontend application for QuickGPT, a modern ChatGPT clone interface built for speed and responsiveness.
+This is the frontend application for RajGPT, a modern ChatGPT clone interface built for speed and responsiveness.
 
 ## Tech Stack
 *   **Framework:** React 19 via Vite

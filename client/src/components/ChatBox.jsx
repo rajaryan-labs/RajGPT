@@ -118,11 +118,13 @@ const ChatBox = () => {
       <div ref={containerRef} className="flex-1 mb-3 sm:mb-5 overflow-y-scroll">
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center gap-2 text-primary">
-            <img
-              src={theme === "dark" ? assets.logo_full : assets.logo_full_dark}
-              alt=""
-              className="w-full max-w-56 sm:max-w-68"
-            />
+            <div className="flex items-center justify-center gap-4 w-full mb-4">
+              <img src={assets.logo} className="w-14 h-14 sm:w-16 sm:h-16" alt="RajGPT Logo" />
+              <div className="flex flex-col text-left">
+                <span className="text-3xl sm:text-4xl font-bold dark:text-white text-black leading-tight">RajGPT</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#A456F7] dark:text-primary">Intelligent AI Assistant</span>
+              </div>
+            </div>
             <p className="mt-5 text-4xl sm:text-6xl text-center text-gray-400 dark:text-white">
               Ask me anything.
             </p>

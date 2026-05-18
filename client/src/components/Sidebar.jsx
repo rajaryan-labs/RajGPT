@@ -70,10 +70,19 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
       className={`flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124]/30 to-[#000000]/30 border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute left-0 z-1 ${!isMenuOpen && "max-md:-translate-x-full"}`}
     >
       {/* logo */}
-      <img
-        src={theme === "dark" ? assets.logo_full : assets.logo_full_dark}
-        className="w-full max-w-48"
-      />
+      <div
+        className="flex items-center gap-3 w-full max-w-48 cursor-pointer mb-2"
+        onClick={() => {
+          navigate("/");
+          setIsMenuOpen(false);
+        }}
+      >
+        <img src={assets.logo} className="w-10 h-10" />
+        <div className="flex flex-col">
+          <span className="text-[22px] font-bold dark:text-white text-black leading-tight">RajGPT</span>
+          <span className="text-[10px] font-semibold text-[#A456F7] dark:text-primary">Intelligent AI Assistant</span>
+        </div>
+      </div>
 
       {/* New Chat Button */}
       <button
@@ -164,7 +173,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         <div className="flex flex-col text-sm ">
           <p>Credits: {user?.credits}</p>
           <p className="text-xs text-gray-400">
-            Purchase credits to use quickgpt
+            Purchase credits to use RajGPT
           </p>
         </div>
       </div>

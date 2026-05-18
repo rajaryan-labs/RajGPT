@@ -1,6 +1,6 @@
-# QuickGPT Server
+# RajGPT Server
 
-This is the Node.js Express backend for the QuickGPT application. It provides robust API endpoints for authentication, managing chat sessions, and interfacing with Google's native Generative AI models.
+This is the Node.js Express backend for the RajGPT application. It provides robust API endpoints for authentication, managing chat sessions, and interfacing with Google's native Generative AI models.
 
 ## Tech Stack
 *   **Framework:** Node.js + Express

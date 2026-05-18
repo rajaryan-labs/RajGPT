@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Backend for QuickGPT",
+  "description": "Backend for RajGPT",
   "main": "server.js",
   "type": "module",
   "scripts": {

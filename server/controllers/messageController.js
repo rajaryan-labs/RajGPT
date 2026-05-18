@@ -102,7 +102,7 @@ export const imageMessageController = async (req, res) => {
     const uploadResponse = await imagekit.files.upload({
       file: base64Image,
       fileName: `${Date.now()}.png`,
-      folder: "quickgpt",
+      folder: "rajgpt",
     });
 
     const reply = {
