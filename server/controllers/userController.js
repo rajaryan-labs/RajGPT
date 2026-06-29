@@ -87,6 +87,9 @@ export const getPublishedImages = async (req, res) => {
       {
         $project: {
           _id: 0,
+          chatId: "$_id",
+          messageId: "$messages._id",
+          userId: "$userId",
           imageUrl: "$messages.content",
           userName: "$userName",
         },
@@ -100,3 +103,34 @@ export const getPublishedImages = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+/**
+ * API Controller to unpublish a community image.
+ * Ensures the logged in user owns the image before unpublishing.
+ */
+export const unpublishImage = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { chatId, messageId } = req.body;
+
+    const chat = await Chat.findOne({ _id: chatId, userId });
+    if (!chat) {
+      return res.json({ success: false, message: "Chat not found or unauthorized" });
+    }
+
+    const message = chat.messages.id(messageId);
+    if (!message) {
+      return res.json({ success: false, message: "Image not found" });
+    }
+
+    if (message.isPublished) {
+      message.isPublished = false;
+      await chat.save();
+    }
+
+    return res.json({ success: true, message: "Image removed from community" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
