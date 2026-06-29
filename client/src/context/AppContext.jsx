@@ -11,7 +11,7 @@ const AppContext = createContext();
 /**
  * AppContextProvider component
  * Provides global state management for user authentication, chats, theme, and API token.
- * It also initializes Axios with the server URL.
+ * Supports guest mode — users can chat without logging in (messages stored in memory).
  */
 export const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -21,6 +21,15 @@ export const AppContextProvider = ({ children }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loadingUser, setLoadingUser] = useState(true);
+
+  // Guest mode state
+  const [guestMessages, setGuestMessages] = useState([]);
+  const [guestCredits, setGuestCredits] = useState(
+    localStorage.getItem("guestCredits") !== null
+      ? parseInt(localStorage.getItem("guestCredits"))
+      : 20
+  );
+  const isGuest = !user && !loadingUser;
 
   /**
    * Fetches user data from the server using the stored token.
@@ -49,7 +58,12 @@ export const AppContextProvider = ({ children }) => {
    */
   const createNewChat = async () => {
     try {
-      if (!user) return toast("Login to create a new chat");
+      if (!user) {
+        // Guest: clear messages and navigate home
+        clearGuestChat();
+        navigate("/");
+        return;
+      }
       navigate("/");
       await axios.get("/api/chat/create", {
         headers: { Authorization: token },
@@ -84,6 +98,69 @@ export const AppContextProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+
+  /**
+   * Sends a text message as a guest (no authentication).
+   * Messages are stored in memory and not persisted to the database.
+   * @param {string} prompt - The user's message
+   * @returns {object} - The AI response message object, or null on failure
+   */
+  const sendGuestMessage = async (prompt, mode = "text", isPublished = false) => {
+    try {
+      const creditCost = mode === "image" ? 2 : 1;
+      
+      if (guestCredits < creditCost) {
+        toast("Sign in to get more credits", { icon: "💎" });
+        navigate("/login");
+        return null;
+      }
+
+      const userMessage = {
+        role: "user",
+        content: prompt,
+        timestamp: Date.now(),
+        isImage: false,
+      };
+      setGuestMessages((prev) => [...prev, userMessage]);
+
+      const endpoint = mode === "image" ? "/api/guest/image" : "/api/guest/text";
+      const { data } = await axios.post(endpoint, { prompt, isPublished });
+
+      if (data.success) {
+        const replyMessage =
+          typeof data.message === "string"
+            ? {
+                role: "assistant",
+                content: data.message,
+                timestamp: Date.now(),
+                isImage: false,
+              }
+            : data.message;
+        
+        setGuestMessages((prev) => [...prev, replyMessage]);
+        
+        // Decrement guest credits
+        const newCredits = guestCredits - creditCost;
+        setGuestCredits(newCredits);
+        localStorage.setItem("guestCredits", newCredits.toString());
+        
+        return replyMessage;
+      } else {
+        toast.error(data.message);
+        return null;
+      }
+    } catch (error) {
+      toast.error(error.message);
+      return null;
+    }
+  };
+
+  /**
+   * Clears guest chat messages (acts as "new chat" for guests).
+   */
+  const clearGuestChat = () => {
+    setGuestMessages([]);
   };
 
   // Effect to apply the selected theme to the document and save to local storage
@@ -132,6 +209,12 @@ export const AppContextProvider = ({ children }) => {
     token,
     setToken,
     axios,
+    // Guest mode
+    isGuest,
+    guestMessages,
+    guestCredits,
+    sendGuestMessage,
+    clearGuestChat,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

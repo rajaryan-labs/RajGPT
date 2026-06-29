@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
  * Login Component
  * Handles user authentication, both for logging in existing users and registering new ones.
  * Submits the form data to the backend and updates the global token state on success.
+ * Includes a "Continue without signing in" option for guest access.
  */
 const Login = () => {
   // State management for form view, name, email, and password
@@ -14,11 +15,12 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const { axios, setToken } = useAppContext();
+  const { axios, setToken, navigate } = useAppContext();
 
   /**
    * Handles the form submission for login or registration.
    * Sends the appropriate request to the API based on the current `state`.
+   * Redirects to home on success.
    * @param {Event} e - The form submission event
    */
   const handleSubmit = async (e) => {
@@ -29,6 +31,7 @@ const Login = () => {
       if (data.success) {
         setToken(data.token);
         localStorage.setItem("token", data.token);
+        navigate("/");
       } else {
         toast.error(data.message);
       }
@@ -108,6 +111,14 @@ const Login = () => {
       >
         {state === "register" ? "Create Account" : "Login"}
       </button>
+
+      {/* Continue without signing in */}
+      <p
+        onClick={() => navigate("/")}
+        className="text-sm text-center w-full text-gray-400 cursor-pointer hover:text-indigo-500 transition-colors"
+      >
+        Continue without signing in →
+      </p>
     </form>
   );
 };

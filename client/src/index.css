@@ -12,6 +12,14 @@
   --color-primary: #e6ccff;
 }
 
+/* Use dynamic viewport height for mobile browsers */
+html,
+body,
+#root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }
@@ -25,4 +33,28 @@
 }
 .loader div:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+/* Sidebar backdrop overlay for mobile */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Prevent body scroll when sidebar is open on mobile */
+@media (max-width: 767px) {
+  body.sidebar-open {
+    overflow: hidden;
+  }
 }

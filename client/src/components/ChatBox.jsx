@@ -8,11 +8,23 @@ import toast from "react-hot-toast";
  * ChatBox Component
  * Responsible for displaying the chat messages, handling user input (text/image prompts),
  * communicating with the backend to fetch AI responses, and auto-scrolling the chat view.
+ * Supports guest mode — guests can chat without login (text only, in-memory).
  */
 const ChatBox = () => {
   const containerRef = useRef(null);
 
-  const { selectedChat, theme, user, setUser, axios, token } = useAppContext();
+  const {
+    selectedChat,
+    theme,
+    user,
+    setUser,
+    axios,
+    token,
+    isGuest,
+    guestMessages,
+    sendGuestMessage,
+    navigate,
+  } = useAppContext();
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,14 +34,31 @@ const ChatBox = () => {
 
   /**
    * Handles the form submission to send a new message.
-   * Updates the UI immediately with the user's prompt, then makes an API request to get the AI response.
-   * Handles both text and image modes and updates credits accordingly.
+   * For guests: calls sendGuestMessage (no auth, no credits).
+   * For authenticated users: updates the UI immediately with the user's prompt,
+   * then makes an API request to get the AI response.
    * @param {Event} e - The form submission event
    */
   const onSubmit = async (e) => {
     try {
       e.preventDefault();
 
+      if (!prompt.trim()) return;
+
+      // Guest mode: use the guest endpoint
+      if (isGuest) {
+        setLoading(true);
+        const promptCopy = prompt;
+        setPrompt("");
+        const result = await sendGuestMessage(promptCopy, mode, isPublished);
+        if (!result) {
+          setPrompt(promptCopy);
+        }
+        setLoading(false);
+        return;
+      }
+
+      // Authenticated mode
       if (!user) return toast("Login to send message");
 
       setLoading(true);
@@ -95,12 +124,14 @@ const ChatBox = () => {
     }
   };
 
-  // Effect to load messages from the currently selected chat
+  // Effect to load messages — from selectedChat for authenticated users, guestMessages for guests
   useEffect(() => {
-    if (selectedChat) {
+    if (isGuest) {
+      setMessages(guestMessages);
+    } else if (selectedChat) {
       setMessages(selectedChat.messages);
     }
-  }, [selectedChat]);
+  }, [selectedChat, guestMessages, isGuest]);
 
   // Effect to auto-scroll to the bottom when new messages arrive
   useEffect(() => {
@@ -113,21 +144,33 @@ const ChatBox = () => {
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col justify-between m-2 sm:m-5 md:m-10 xl:mx-30 max-md:mt-14 2xl:pr-40 pb-[env(safe-area-inset-bottom)]">
+    <div className="flex-1 flex flex-col h-full min-h-0 px-2 pt-1 pb-2 sm:px-5 sm:pt-3 sm:pb-3 md:px-10 md:pt-5 md:pb-5 xl:px-30 max-md:pt-12 2xl:pr-40">
       {/* Chat Messages */}
-      <div ref={containerRef} className="flex-1 mb-3 sm:mb-5 overflow-y-scroll">
+      <div ref={containerRef} className="flex-1 min-h-0 mb-2 sm:mb-3 overflow-y-auto">
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center gap-2 text-primary">
-            <div className="flex items-center justify-center gap-4 w-full mb-4">
-              <img src={assets.logo} className="w-14 h-14 sm:w-16 sm:h-16" alt="RajGPT Logo" />
+            <div className="flex items-center justify-center gap-3 sm:gap-4 w-full mb-2 sm:mb-4">
+              <img src={assets.logo} className="w-11 h-11 sm:w-16 sm:h-16" alt="RajGPT Logo" />
               <div className="flex flex-col text-left">
-                <span className="text-3xl sm:text-4xl font-bold dark:text-white text-black leading-tight">RajGPT</span>
-                <span className="text-xs sm:text-sm font-semibold text-[#A456F7] dark:text-primary">Intelligent AI Assistant</span>
+                <span className="text-2xl sm:text-4xl font-bold dark:text-white text-black leading-tight">RajGPT</span>
+                <span className="text-[10px] sm:text-sm font-semibold text-[#A456F7] dark:text-primary">Intelligent AI Assistant</span>
               </div>
             </div>
-            <p className="mt-5 text-4xl sm:text-6xl text-center text-gray-400 dark:text-white">
+            <p className="mt-2 sm:mt-5 text-2xl sm:text-4xl md:text-6xl text-center text-gray-400 dark:text-white">
               Ask me anything.
             </p>
+            {isGuest && (
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-400 dark:text-gray-500 text-center px-4">
+                You're chatting as a guest.{" "}
+                <span
+                  onClick={() => navigate("/login")}
+                  className="text-indigo-500 cursor-pointer hover:underline"
+                >
+                  Sign in
+                </span>{" "}
+                to save your chats.
+              </p>
+            )}
           </div>
         )}
         {messages.map((message, index) => (
@@ -135,7 +178,7 @@ const ChatBox = () => {
         ))}
         {/* Three Dots Loading */}
         {loading && (
-          <div className="loader flex items-center gap-1.5">
+          <div className="loader flex items-center gap-1.5 py-2">
             <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce"></div>
             <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce"></div>
             <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce"></div>
@@ -144,7 +187,7 @@ const ChatBox = () => {
       </div>
 
       {mode === "image" && (
-        <label className="inline-flex items-center gap-2 mb-3 text-sm mx-auto">
+        <label className="inline-flex items-center gap-2 mb-2 text-sm mx-auto">
           <p className="text-xs">Publish Generated Image to Community</p>
           <input
             type="checkbox"
@@ -157,12 +200,12 @@ const ChatBox = () => {
       {/* Prompt Input Box */}
       <form
         onSubmit={onSubmit}
-        className="bg-primary/20 dark:bg-[#583C79]/30 border border-primary dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-2 pl-3 sm:p-3 sm:pl-4 mx-auto flex gap-2 sm:gap-4 items-center shrink-0"
+        className="bg-primary/20 dark:bg-[#583C79]/30 border border-primary dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-2 pl-3 sm:p-4 sm:pl-6 mx-auto flex gap-2 sm:gap-4 items-center shrink-0"
       >
         <select
           onChange={(e) => setMode(e.target.value)}
           value={mode}
-          className="text-xs sm:text-sm pl-1 sm:pl-3 pr-1 sm:pr-2 outline-none"
+          className="text-sm sm:text-base pl-1 sm:pl-3 pr-1 sm:pr-2 outline-none bg-transparent"
         >
           <option className="dark:bg-purple-900" value="text">
             Text
@@ -174,14 +217,14 @@ const ChatBox = () => {
         <input
           onChange={(e) => setPrompt(e.target.value)}
           value={prompt}
-          className="flex-1 w-0 min-w-0 text-xs sm:text-sm outline-none"
+          className="flex-1 w-0 min-w-0 text-sm sm:text-base outline-none bg-transparent"
           type="text"
           placeholder="Enter Your Prompt Here.."
           required
         />
-        <button disabled={loading} className="shrink-0">
+        <button disabled={loading} className="shrink-0 pr-1 sm:pr-2">
           <img
-            className="w-6 sm:w-8 cursor-pointer"
+            className="w-6 sm:w-9 cursor-pointer"
             src={loading ? assets.stop_icon : assets.send_icon}
             alt=""
           />

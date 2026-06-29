@@ -40,7 +40,7 @@ const Message = ({ message }) => {
               <Markdown>{message.content}</Markdown>
             </div>
           )}
-          <span>{moment(message.timestamp).fromNow()}</span>
+          <span className="text-xs text-gray-400 dark:text-[#B1A6C0]">{moment(message.timestamp).fromNow()}</span>
         </div>
       )}
     </div>
